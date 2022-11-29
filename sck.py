@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.image as img
 import numpy as np
-
+import array
 plt.style.use('seaborn')
 from tkinter import filedialog
 from tkinter import *
