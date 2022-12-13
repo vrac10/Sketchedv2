@@ -5,8 +5,7 @@ import cv2
 plt.style.use('seaborn')
 from tkinter import filedialog
 from tkinter import *
-import skimage 
-import array
+
 root = Tk()
 root.title("Sketched")
 
@@ -53,10 +52,7 @@ def file_opener(a=0):
             plt.axis(False)
             plt.show()
         
-def function(Test):
-    print("Hi this is a test", Test)
 
-function('a')
 button = Button(root, text="Browse", command=file_opener, width=5, height=1)
 button.grid(column=4, row=1)
 button1 = Button(root, text="Convert", command=lambda: file_opener(1), state=DISABLED, width=5, height=1)
