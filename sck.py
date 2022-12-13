@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.image as img
 import numpy as np
-from skimage import io
+
 import cv2
 plt.style.use('seaborn')
 from tkinter import filedialog
@@ -53,7 +53,7 @@ def file_opener(a=0):
             plt.axis(False)
             plt.show()
         
-        
+print("hohohohohohoh")
 button = Button(root, text="Browse", command=file_opener, width=5, height=1)
 button.grid(column=4, row=1)
 button1 = Button(root, text="Convert", command=lambda: file_opener(1), state=DISABLED, width=5, height=1)
