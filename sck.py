@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 import matplotlib.image as img
 import numpy as np
-import array
+from skimage import io
+import cv2
 plt.style.use('seaborn')
 from tkinter import filedialog
 from tkinter import *
@@ -10,6 +11,14 @@ root = Tk()
 root.title("Sketched")
 
 ClickChecker = False
+def skectched(image):
+    grey_img = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    invert_img = cv2.bitwise_not(grey_img)
+    blur_img = cv2.GaussianBlur(invert_img, (111,111),0)
+    invertedblur = cv2.bitwise_not(blur_img)
+    sketch_img = cv2.divide(grey_img,invertedblur,scale= 256.0)
+    return sketch_img
+
 
 
 def file_opener(a=0):
@@ -19,7 +28,7 @@ def file_opener(a=0):
     if a == 0:
         ClickChecker = True
 
-        fileName = filedialog.askopenfile(mode='r', filetypes=[('Image files', '*.jpg'), ('Image files(png)', '*.png')])
+        fileName = filedialog.askopenfile(mode='r', filetypes=[('Image files', '*.jpg'), ('Image files(png)', '*.png'), ('Image files', '*.jpeg') ])
         if fileName is not None:
             print(fileName.name)
             fileN = fileName.name
@@ -30,13 +39,21 @@ def file_opener(a=0):
     elif a == 1:
 
         print(fileN)
+        img = cv2.imread(fileN)
+        RGB_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        
         print(b_w_checker.get(), aqua_checker.get(), sepia_checker.get(), sketch_checker.get(), vintage_checker.get())
-        image = img.imread(fileN)
-        plt.imshow(image)
-        plt.grid(False)
-        plt.show()
-
-
+        if sketch_checker.get() == 1:
+            sketched_image = skectched(RGB_img)
+            plt.imshow(sketched_image)
+            plt.axis(False)
+            plt.show()
+        else:
+            plt.imshow(RGB_img)
+            plt.axis(False)
+            plt.show()
+        
+        
 button = Button(root, text="Browse", command=file_opener, width=5, height=1)
 button.grid(column=4, row=1)
 button1 = Button(root, text="Convert", command=lambda: file_opener(1), state=DISABLED, width=5, height=1)
