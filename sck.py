@@ -11,11 +11,10 @@ root.title("Sketched")
 
 ClickChecker = False
 def skectched(image):
-    grey_img = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    grey_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     invert_img = cv2.bitwise_not(grey_img)
-    blur_img = cv2.GaussianBlur(invert_img, (111,111),0)
-    invertedblur = cv2.bitwise_not(blur_img)
-    sketch_img = cv2.divide(grey_img,invertedblur,scale= 256.0)
+    blur_img = cv2.GaussianBlur(invert_img, (21,21),sigmaX=0, sigmaY=0)
+    sketch_img = cv2.divide(grey_img,255 - blur_img,scale= 256.0)
     return sketch_img
 
 
@@ -44,7 +43,13 @@ def file_opener(a=0):
         print(b_w_checker.get(), aqua_checker.get(), sepia_checker.get(), sketch_checker.get(), vintage_checker.get())
         if sketch_checker.get() == 1:
             sketched_image = skectched(RGB_img)
-            plt.imshow(sketched_image)
+            
+            plt.subplot(1, 2, 2) 
+            plt.imshow(sketched_image, cmap='gray')
+            plt.axis(False)
+
+            plt.subplot(1, 2, 1) 
+            plt.imshow(RGB_img)
             plt.axis(False)
             plt.show()
         else:
