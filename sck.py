@@ -16,13 +16,20 @@ def filters(image,checkers):
         grey_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         return grey_img
     elif checkers[1]:
-        pass
+        
+        return 
     elif checkers[2]:
-        grey_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        invert_img = cv2.bitwise_not(grey_img)
-        blur_img = cv2.GaussianBlur(invert_img, (21,21),sigmaX=0, sigmaY=0)
-        sketch_img = cv2.divide(grey_img,255 - blur_img,scale= 256.0)
+        
+        smoothGrayScale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        sketch_img = cv2.adaptiveThreshold(smoothGrayScale, 255, 
+                cv2.ADAPTIVE_THRESH_MEAN_C, 
+                    cv2.THRESH_BINARY, 9, 9)                  
+        # grey_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        # invert_img = cv2.bitwise_not(grey_img)
+        # blur_img = cv2.GaussianBlur(invert_img, (21,21),sigmaX=0, sigmaY=0)
+        # sketch_img = cv2.divide(grey_img,255 - blur_img,scale= 256.0)
         return sketch_img
+
     elif checkers[3]:
         sepia_Kernel = np.array([[0.272, 0.534, 0.131],[0.349, 0.686, 0.168],[0.393, 0.769, 0.189]])
         sepia_image = cv2.filter2D(src=image, kernel=sepia_Kernel, ddepth=-1)
@@ -58,13 +65,13 @@ def file_opener(a=0):
             
                 filteredImage = filters(RGB_img, checkers)
             
-                plt.subplot(1, 2, 2) 
+                #plt.subplot(1, 2, 2) 
                 plt.imshow(filteredImage, cmap='gray')
                 plt.axis(False)
 
-                plt.subplot(1, 2, 1) 
-                plt.imshow(RGB_img)
-                plt.axis(False)
+                # plt.subplot(1, 2, 1) 
+                # plt.imshow(RGB_img)
+                # plt.axis(False)
                 plt.show()
 
                 
