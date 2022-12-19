@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import matplotlib.image as img
+from tkinter import messagebox as mb
 import numpy as np
 import cv2
 plt.style.use('seaborn')
@@ -10,14 +11,22 @@ root = Tk()
 root.title("Sketched")
 
 ClickChecker = False
-def skectched(image):
-    grey_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    invert_img = cv2.bitwise_not(grey_img)
-    blur_img = cv2.GaussianBlur(invert_img, (21,21),sigmaX=0, sigmaY=0)
-    sketch_img = cv2.divide(grey_img,255 - blur_img,scale= 256.0)
-    return sketch_img
-
-
+def filters(image,checkers):
+    if checkers[0]:
+        grey_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        return grey_img
+    elif checkers[1]:
+        pass
+    elif checkers[2]:
+        grey_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        invert_img = cv2.bitwise_not(grey_img)
+        blur_img = cv2.GaussianBlur(invert_img, (21,21),sigmaX=0, sigmaY=0)
+        sketch_img = cv2.divide(grey_img,255 - blur_img,scale= 256.0)
+        return sketch_img
+    elif checkers[3]:
+        sepia_Kernel = np.array([[0.272, 0.534, 0.131],[0.349, 0.686, 0.168],[0.393, 0.769, 0.189]])
+        sepia_image = cv2.filter2D(src=image, kernel=sepia_Kernel, ddepth=-1)
+        return sepia_image
 
 def file_opener(a=0):
     global ClickChecker
@@ -36,26 +45,29 @@ def file_opener(a=0):
             button1["state"] = NORMAL
     elif a == 1:
 
-        print(fileN)
         img = cv2.imread(fileN)
         RGB_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         
-        print(b_w_checker.get(), aqua_checker.get(), sepia_checker.get(), sketch_checker.get(), vintage_checker.get())
-        if sketch_checker.get() == 1:
-            sketched_image = skectched(RGB_img)
-            
-            plt.subplot(1, 2, 2) 
-            plt.imshow(sketched_image, cmap='gray')
-            plt.axis(False)
+        checkers = [b_w_checker.get(), aqua_checker.get(), sketch_checker.get(), sepia_checker.get(), vintage_checker.get()]
+        
+        if checkers.count(1) > 1:
 
-            plt.subplot(1, 2, 1) 
-            plt.imshow(RGB_img)
-            plt.axis(False)
-            plt.show()
+            mb.showwarning(message="Only one filter at a time is supported!")
+
         else:
-            plt.imshow(RGB_img)
-            plt.axis(False)
-            plt.show()
+            
+                filteredImage = filters(RGB_img, checkers)
+            
+                plt.subplot(1, 2, 2) 
+                plt.imshow(filteredImage, cmap='gray')
+                plt.axis(False)
+
+                plt.subplot(1, 2, 1) 
+                plt.imshow(RGB_img)
+                plt.axis(False)
+                plt.show()
+
+                
         
 
 button = Button(root, text="Browse", command=file_opener, width=5, height=1)
