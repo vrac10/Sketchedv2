@@ -17,26 +17,25 @@ def NewWindow(imageFile):
         i += 0.1
     img_size = (width, height)
     my_Image = CTkImage(dark_image=img, size= img_size)
-    Img_label = CTkLabel(editing_window, image= my_Image, text="")
-    Img_label.grid(padx = 20, pady = 20)
+    image_frame = CTkFrame(editing_window, width= 500, height = 500)
+    image_frame.grid(row= 0 , column = 0)
+    Img_label = CTkLabel(image_frame, image= my_Image, text="")
+    Img_label.pack()
+    Save_button = CTkButton(editing_window, text = "Save",command= lambda : save(choice))
+    
+    def save(type, image=0):
+        filename = str(imageFile).split("/")[-1].split(".")
+        print(filename)
 
-    b_w_checker = IntVar()
-    aqua_checker = IntVar()
-    sepia_checker = IntVar()
-    vintage_checker = IntVar()
-    sketch_checker = IntVar()
 
-    b_w = CTkCheckBox(editing_window, text="B&W", variable=b_w_checker)
-    b_w.grid(row=1, column=0)
-
-    aqua = CTkCheckBox(editing_window, text="AQUA", variable=aqua_checker)
-    aqua.grid(row=1, column=1)
-
-    sketch = CTkCheckBox(editing_window, text="SKETCH", variable=sketch_checker)
-    sketch.grid(row=1, column=2)
-
-    sepia = CTkCheckBox(editing_window, text="SEPIA", variable=sepia_checker)
-    sepia.grid(row=1, column=3)
-
-    vintage = CTkCheckBox(editing_window, text="VINTAGE", variable=vintage_checker)
-    vintage.grid(row=1, column=4)
+    def optionmenu_callback(choice):
+        
+        if choice != "None":
+            Save_button.grid(row= 1, column =0)
+        else: 
+            Save_button.grid_forget()
+            
+    optionmenu_var = StringVar(value = "None")
+    filter_options = CTkOptionMenu(editing_window, values= ["None","B&W", "Sepia", "Sketch", "Bilateral"], variable= optionmenu_var, command= optionmenu_callback)
+    filter_options.grid(row = 0, column= 1)
+    
