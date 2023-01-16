@@ -1,6 +1,9 @@
 import tkinter
 from customtkinter import *
 from PIL import Image,ImageTk
+from tkinter.filedialog import asksaveasfile
+import os
+import Logic
 
 def NewWindow(imageFile):
     editing_window = CTkToplevel()
@@ -21,17 +24,20 @@ def NewWindow(imageFile):
     image_frame.grid(row= 0 , column = 0)
     Img_label = CTkLabel(image_frame, image= my_Image, text="")
     Img_label.pack()
-    Save_button = CTkButton(editing_window, text = "Save",command= lambda : save(choice))
+    Save_button = CTkButton(editing_window, text = "Save")
     
-    def save(type, image=0):
-        filename = str(imageFile).split("/")[-1].split(".")
-        print(filename)
+    def save(type, image=img):
+        os.system('cd /Users/rohitkumar/Desktop/')
+        filename = type + "_" + imageFile.split("/")[-1]
+        image = image.save(f'/Users/rohitkumar/Desktop/{filename}')
 
 
     def optionmenu_callback(choice):
         
         if choice != "None":
+            
             Save_button.grid(row= 1, column =0)
+            Save_button.configure(command = lambda : save(choice))
         else: 
             Save_button.grid_forget()
             
