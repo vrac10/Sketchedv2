@@ -2,6 +2,7 @@ import tkinter
 from customtkinter import *
 from PIL import Image,ImageTk
 from tkinter.filedialog import asksaveasfile
+import cv2
 import os
 import Logic
 
@@ -24,21 +25,31 @@ def NewWindow(imageFile):
     image_frame.grid(row= 0 , column = 0)
     Img_label = CTkLabel(image_frame, image= my_Image, text="")
     Img_label.pack()
-    Save_button = CTkButton(editing_window, text = "Save")
+    Save_button = CTkButton(editing_window, text = "Save", cursor = 'hand2')
     
     def save(type, image=img):
-        os.system('cd /Users/rohitkumar/Desktop/')
-        filename = type + "_" + imageFile.split("/")[-1]
-        image = image.save(f'/Users/rohitkumar/Desktop/{filename}')
+        
+        if os.path.exists('/Users/rohitkumar/Desktop/Sketched'):
+            filename = type + "_" + str(imageFile).split("/")[-1]
+            image = image.save(f'/Users/rohitkumar/Desktop/Sketched/{filename}')
+        else:
+            os.system(' mkdir /Users/rohitkumar/Desktop/Sketched ')
+            filename = type + "_" + str(imageFile).split("/")[-1]
+            image = image.save(f'/Users/rohitkumar/Desktop/Sketched/{filename}')
 
+    img_cv2 = cv2.imread(imageFile)
+    images = Logic.filters(img_cv2)
 
     def optionmenu_callback(choice):
         
         if choice != "None":
-            
+            my_Image.configure(dark_image= Image.fromarray(images[choice]))
+            Img_label.configure(image = my_Image)
             Save_button.grid(row= 1, column =0)
-            Save_button.configure(command = lambda : save(choice))
+            Save_button.configure(command = lambda : save(choice, Image.fromarray(images[choice])))
         else: 
+            my_Image.configure(dark_image= img)
+            Img_label.configure(image = my_Image)
             Save_button.grid_forget()
             
     optionmenu_var = StringVar(value = "None")
