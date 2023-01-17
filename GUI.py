@@ -13,6 +13,7 @@ label.place(x = 165, y = 175)
 filename_field = CTkEntry(root, width=280, height= 28)
 filename_field.place(x = 110, y = 235)
 
+
 def browse_convert_function(a):
     
     global fileN
