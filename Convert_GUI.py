@@ -8,7 +8,6 @@ class MessageBox():
 
     def __init__(self):
         self.root = CTkToplevel()
-        self.root.overrideredirect(1)
         self.root.title('Saved')
         self.root.geometry('200x160')
 
