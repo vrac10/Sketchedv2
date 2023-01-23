@@ -50,7 +50,7 @@ def NewWindow(imageFile):
 
     def save(type, image):
 
-        fileLocation = str(imageFile).replace(str(imageFile).split("/")[-1],"") + '/Sketched/'
+        fileLocation = str(imageFile).replace(str(imageFile).split("/")[-1],"") + 'Sketched/'
         filename = fileLocation + type + "_" + str(imageFile).split("/")[-1]
 
         if platform.uname().system == 'Windows':
@@ -59,7 +59,7 @@ def NewWindow(imageFile):
                 obj.Ok('Image saved\nsuccessfully')
 
             else:
-                os.system(f' mkdir {fileLocation}')
+                os.mkdir(fileLocation)
                 image = image.save(filename)
                 obj.Ok('Image saved\nsuccessfully')
 
