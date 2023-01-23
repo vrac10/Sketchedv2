@@ -70,7 +70,7 @@ def NewWindow(imageFile):
                 obj.Ok('Image saved\nsuccessfully')
 
             else:
-                os.system(f' mkdir {fileLocation} ')
+                os.mkdir(fileLocation)
                 image = image.save(filename)
                 obj.Ok('Image saved\nsuccessfully')
         
